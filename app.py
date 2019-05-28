@@ -18,12 +18,13 @@ app.columnconfigure(1, weight=1)
 app.columnconfigure(2, weight=1)
 app.columnconfigure(3, weight=1)
 
-app.rowconfigure(0, weight=2)
-app.rowconfigure(1, weight=1)
+app.rowconfigure(0, weight=0)
+app.rowconfigure(1, weight=2)
 app.rowconfigure(2, weight=1)
 app.rowconfigure(3, weight=1)
 app.rowconfigure(4, weight=1)
- 
+app.rowconfigure(5, weight=1) 
+app.rowconfigure(6, weight=1)
 
 def controleBotoes(tecla):
     display.insert(tk.END, tecla)
@@ -68,6 +69,12 @@ def somaEsubtracao(expressao):
             print("Erro", str(e))
             return _expressao
 
+def arredonda(numero):
+    decimal = re.search("\.(\d{1,})", str(numero)).group(1)
+    if int(decimal) > 0:
+        return round(float(numero), 2)
+    return int(float(numero))
+
 def calcularExpressao(evento=None):
     try:
         expressao = display.get()    
@@ -92,8 +99,8 @@ def calcularExpressao(evento=None):
 
         while "+" in elementos or "-" in elementos:
             elementos = somaEsubtracao(elementos)
-        resultado = round(float(elementos[0]), 2)
-        lbDisplay['text'] = str(resultado)
+
+        lbDisplay['text'] = str( arredonda(elementos[0]) )
     except Exception as e:
         print("Erro,",str(e))
 
