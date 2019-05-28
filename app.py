@@ -8,8 +8,9 @@ except:
     print("Ops.. não foi possivel executar a aplicação")
 
 app = tk.Tk()
-
-
+app.title("BntCalc")
+app.geometry("300x200")
+app.option_add("*Font", "Verdana 16")
 app.columnconfigure(0, weight=1)
 app.columnconfigure(1, weight=1)
 app.columnconfigure(2, weight=1)
