@@ -4,8 +4,6 @@ try:
     import tkinter as tk
 except ImportError:
     import Tkinter as tk
-except:
-    print("Ops.. não foi possivel executar a aplicação")
 
 app = tk.Tk()
 app.title("BntCalc")
@@ -26,11 +24,23 @@ app.rowconfigure(4, weight=1)
 app.rowconfigure(5, weight=1) 
 app.rowconfigure(6, weight=1)
 
-def controleBotoes(tecla):
+def controle_botoes(tecla):
     display.insert(tk.END, tecla)
 
-def controleDisplayInput(valorSePermitido, tecla):
-    return tecla in "0123456789+-*/." and not re.search("[\.\+\-\*\/][\.\+\-\*\/]", valorSePermitido) and not re.search("\d{1,}\.\d{1,}\.", valorSePermitido) and not re.search("^[\.\+\-\*\/]", valorSePermitido)
+def controle_display_input(valor_se_permitido, tecla):
+    #Evita a entrada de caracteres invalidos
+    tecla_valida = tecla in "0123456789+-*/."
+    
+    #Evita operador ao lado de operador
+    posicao_operador_valida = not re.search("[\.\+\-\*\/][\.\+\-\*\/]", valor_se_permitido)
+    
+    #Evita ponto decimal ao lado de ponto decimal
+    ponto_decimal_valido = not re.search("\d{1,}\.\d{1,}\.", valor_se_permitido)  
+
+    #Evita iniciar com operador ou ponto decimal
+    inicio_valido = not re.search("^[\.\+\-\*\/]", valor_se_permitido)
+
+    return tecla_valida and posicao_operador_valida and ponto_decimal_valido and inicio_valido
 
 #resolve multiplicação e divisão
 def resolvePrecedencia(expressao):
@@ -75,7 +85,7 @@ def arredonda(numero):
         return round(float(numero), 2)
     return int(float(numero))
 
-def calcularExpressao(evento=None):
+def calcular_expressao(evento=None):
     try:
         expressao = display.get()    
         if len(expressao) == 0:
@@ -105,26 +115,26 @@ def calcularExpressao(evento=None):
         print("Erro,",str(e))
 
 lbDisplay = tk.Label(app, text="0", anchor="w")
-displayValidacao = (app.register(controleDisplayInput), '%P', '%S')
+displayValidacao = (app.register(controle_display_input), '%P', '%S')
 display = tk.Entry(app, validate = "key", validatecommand = displayValidacao)
-display.bind("<Return>", calcularExpressao)
+display.bind("<Return>", calcular_expressao)
 
-btn0 = tk.Button(app, text="0", command=lambda: controleBotoes("0"))
-btn1 = tk.Button(app, text="1", command=lambda: controleBotoes("1"))
-btn2 = tk.Button(app, text="2", command=lambda: controleBotoes("2"))
-btn3 = tk.Button(app, text="3", command=lambda: controleBotoes("3"))
-btn4 = tk.Button(app, text="4", command=lambda: controleBotoes("4"))
-btn5 = tk.Button(app, text="5", command=lambda: controleBotoes("5"))
-btn6 = tk.Button(app, text="6", command=lambda: controleBotoes("6"))
-btn7 = tk.Button(app, text="7", command=lambda: controleBotoes("7"))
-btn8 = tk.Button(app, text="8", command=lambda: controleBotoes("8"))
-btn9 = tk.Button(app, text="9", command=lambda: controleBotoes("9"))
-btnMais = tk.Button(app, text="+", command=lambda: controleBotoes("+"))
-btnMenos = tk.Button(app, text="-", command=lambda: controleBotoes("-"))
-btnVezes = tk.Button(app, text="*", command=lambda: controleBotoes("*"))
-btnDivisao = tk.Button(app, text="/", command=lambda: controleBotoes("/"))
-btnIgual = tk.Button(app, text="=", command=calcularExpressao)
-btnPonto = tk.Button(app, text=".", command=lambda: controleBotoes("."))
+btn0 = tk.Button(app, text="0", command=lambda: controle_botoes("0"))
+btn1 = tk.Button(app, text="1", command=lambda: controle_botoes("1"))
+btn2 = tk.Button(app, text="2", command=lambda: controle_botoes("2"))
+btn3 = tk.Button(app, text="3", command=lambda: controle_botoes("3"))
+btn4 = tk.Button(app, text="4", command=lambda: controle_botoes("4"))
+btn5 = tk.Button(app, text="5", command=lambda: controle_botoes("5"))
+btn6 = tk.Button(app, text="6", command=lambda: controle_botoes("6"))
+btn7 = tk.Button(app, text="7", command=lambda: controle_botoes("7"))
+btn8 = tk.Button(app, text="8", command=lambda: controle_botoes("8"))
+btn9 = tk.Button(app, text="9", command=lambda: controle_botoes("9"))
+btnMais = tk.Button(app, text="+", command=lambda: controle_botoes("+"))
+btnMenos = tk.Button(app, text="-", command=lambda: controle_botoes("-"))
+btnVezes = tk.Button(app, text="*", command=lambda: controle_botoes("*"))
+btnDivisao = tk.Button(app, text="/", command=lambda: controle_botoes("/"))
+btnIgual = tk.Button(app, text="=", command=calcular_expressao)
+btnPonto = tk.Button(app, text=".", command=lambda: controle_botoes("."))
 btnLimpar = tk.Button(app, text="C")
 btnDel = tk.Button(app, text="Del")
 
